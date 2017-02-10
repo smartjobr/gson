@@ -39,6 +39,7 @@ import static com.google.gson.Gson.DEFAULT_JSON_NON_EXECUTABLE;
 import static com.google.gson.Gson.DEFAULT_LENIENT;
 import static com.google.gson.Gson.DEFAULT_PRETTY_PRINT;
 import static com.google.gson.Gson.DEFAULT_SERIALIZE_NULLS;
+import static com.google.gson.Gson.DEFAULT_SKIP_NULLS;
 import static com.google.gson.Gson.DEFAULT_SPECIALIZE_FLOAT_VALUES;
 
 /**
@@ -85,6 +86,7 @@ public final class GsonBuilder {
   /** tree-style hierarchy factories. These come after factories for backwards compatibility. */
   private final List<TypeAdapterFactory> hierarchyFactories = new ArrayList<TypeAdapterFactory>();
   private boolean serializeNulls = DEFAULT_SERIALIZE_NULLS;
+  private boolean skipNulls = DEFAULT_SKIP_NULLS;
   private String datePattern;
   private int dateStyle = DateFormat.DEFAULT;
   private int timeStyle = DateFormat.DEFAULT;
@@ -167,6 +169,11 @@ public final class GsonBuilder {
   public GsonBuilder serializeNulls() {
     this.serializeNulls = true;
     return this;
+  }
+
+  public GsonBuilder skipNulls() {
+      this.skipNulls = true;
+      return this;
   }
 
   /**
@@ -567,7 +574,7 @@ public final class GsonBuilder {
     addTypeAdaptersForDate(datePattern, dateStyle, timeStyle, factories);
 
     return new Gson(excluder, fieldNamingPolicy, instanceCreators,
-        serializeNulls, complexMapKeySerialization,
+        serializeNulls, skipNulls, complexMapKeySerialization,
         generateNonExecutableJson, escapeHtmlChars, prettyPrinting, lenient,
         serializeSpecialFloatingPointValues, longSerializationPolicy, factories);
   }

@@ -138,6 +138,19 @@ public class NullObjectAndFieldTest extends TestCase {
     assertTrue(result.contains("\"str\":null"));
   }
   
+  public void testSkipNulls() throws Exception {
+	Gson gson = new GsonBuilder().skipNulls().create();
+	  
+	ClassWithInitializedMembers target =
+			gson.fromJson("{\"array\":null, \"str1\":null, \"str2\": null }", ClassWithInitializedMembers.class);
+	assertEquals(ClassWithInitializedMembers.MY_STRING_DEFAULT, target.str1);
+	assertNull(target.str2);
+	assertEquals(ClassWithInitializedMembers.MY_INT_DEFAULT, target.int1);
+	assertEquals(0, target.int2); // test the default value of a primitive int field per JVM spec
+	assertEquals(ClassWithInitializedMembers.MY_BOOLEAN_DEFAULT, target.bool1);
+	assertFalse(target.bool2); // test the default value of a primitive boolean field per JVM spec
+  }
+  
   public void testPrintPrintingArraysWithNulls() throws Exception {
     gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
